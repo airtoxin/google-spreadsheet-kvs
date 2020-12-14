@@ -25,3 +25,14 @@ test("get null", async () => {
 
   await expect(storage.getByIndex(100)).resolves.toBe(null);
 });
+
+test("usage example", async () => {
+  const storage = getStorage();
+  await storage.configure();
+
+  await storage.set("My key", "Example value");
+  await expect(storage.get("My key")).resolves.toBe("Example value");
+
+  await storage.delete("My key");
+  await expect(storage.get("My key")).resolves.toBe(null);
+});
