@@ -1,10 +1,14 @@
-import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet, ServiceAccountCredentials } from "google-spreadsheet";
+import {
+  GoogleSpreadsheet,
+  GoogleSpreadsheetWorksheet,
+  ServiceAccountCredentials,
+} from "google-spreadsheet";
 import { JsonValue } from "type-fest";
 import { crc16 } from "crc";
 
 const GOOGLE_SPREADSHEET_MAX_CELL_COUNT = 5000000;
 const COLS = 1;
-const ROWS = Math.floor((GOOGLE_SPREADSHEET_MAX_CELL_COUNT / COLS) - 1);
+const ROWS = Math.floor(GOOGLE_SPREADSHEET_MAX_CELL_COUNT / COLS - 1);
 
 export class GoogleSpreadsheetStorage {
   private doc: GoogleSpreadsheet;
@@ -23,8 +27,12 @@ export class GoogleSpreadsheetStorage {
     if (this.sheet == null) {
       this.sheet = await this.doc.addSheet();
     }
-    await this.sheet.updateProperties({ gridProperties: { rowCount: 1, columnCount: COLS } });
-    await this.sheet.updateProperties({ gridProperties: { rowCount: ROWS, columnCount: COLS } });
+    await this.sheet.updateProperties({
+      gridProperties: { rowCount: 1, columnCount: COLS },
+    });
+    await this.sheet.updateProperties({
+      gridProperties: { rowCount: ROWS, columnCount: COLS },
+    });
   }
 
   async set(key: string, value: JsonValue): Promise<number> {
@@ -33,13 +41,13 @@ export class GoogleSpreadsheetStorage {
   }
 
   async setByIndex(index: number, value: JsonValue): Promise<number> {
-    if (this.sheet == null) throw new Error("GoogleSpreadsheetStore not configured.");
-    await this.sheet.loadCells(`A${index}`)
+    if (this.sheet == null)
+      throw new Error("GoogleSpreadsheetStore not configured.");
+    await this.sheet.loadCells(`A${index}`);
     const cell = await this.sheet.getCellByA1(`A${index}`);
     cell.value = JSON.stringify(value);
     await this.sheet.saveUpdatedCells();
     return index;
-
   }
 
   async get(key: string): Promise<JsonValue> {
@@ -48,8 +56,9 @@ export class GoogleSpreadsheetStorage {
   }
 
   async getByIndex(index: number): Promise<JsonValue> {
-    if (this.sheet == null) throw new Error("GoogleSpreadsheetStore not configured.");
-    await this.sheet.loadCells(`A${index}`)
+    if (this.sheet == null)
+      throw new Error("GoogleSpreadsheetStore not configured.");
+    await this.sheet.loadCells(`A${index}`);
     const cell = await this.sheet.getCellByA1(`A${index}`);
     if (typeof cell.value !== "string") return null;
     return JSON.parse(cell.value);
@@ -61,8 +70,9 @@ export class GoogleSpreadsheetStorage {
   }
 
   async deleteByIndex(index: number): Promise<number> {
-    if (this.sheet == null) throw new Error("GoogleSpreadsheetStore not configured.");
-    await this.sheet.loadCells(`A${index}`)
+    if (this.sheet == null)
+      throw new Error("GoogleSpreadsheetStore not configured.");
+    await this.sheet.loadCells(`A${index}`);
     const cell = await this.sheet.getCellByA1(`A${index}`);
     cell.value = null!;
     await this.sheet.saveUpdatedCells();

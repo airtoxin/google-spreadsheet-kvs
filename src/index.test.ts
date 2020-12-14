@@ -2,10 +2,11 @@ import { GoogleSpreadsheetStorage } from "./index";
 
 jest.setTimeout(1000 * 30);
 
-const getStorage = () => new GoogleSpreadsheetStorage(process.env.SHEET_ID!, {
-  private_key: process.env.PRIVATE_KEY!,
-  client_email: process.env.CLIENT_EMAIL!
-});
+const getStorage = () =>
+  new GoogleSpreadsheetStorage(process.env.SHEET_ID!, {
+    private_key: process.env.PRIVATE_KEY!,
+    client_email: process.env.CLIENT_EMAIL!,
+  });
 
 test("set and get", async () => {
   const storage = getStorage();
