@@ -21,3 +21,8 @@ console.log(await storage.get("My key")); // "Example value"
 await storage.delete("My key");
 console.log(await storage.get("My key")); // null
 ```
+
+## Limitations
+
+This library uses CRC16 hashing algorithm to convert Key to sheet row index.    
+This means different key maps to same row index, so accidentally override value with different key.
