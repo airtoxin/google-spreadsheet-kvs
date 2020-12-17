@@ -2,6 +2,7 @@
   "name": "google-spreadsheet-kvs",
   "version": "1.0.1",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": "git@github.com:airtoxin/google-spreadsheet-kvs.git",
   "author": "airtoxin <airtoxin@icloud.com>",
   "license": "MIT",
